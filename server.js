@@ -32,9 +32,6 @@ app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:false }));
 app.use(cookieParser());
-app.use("/",(req,res)=>{
-  res.send(200);
-});
 app.use("/api/user",authRouter);
 app.use("/api/product",productRouter);
 app.use("/api/media",mediaRouter);
@@ -64,7 +61,7 @@ app.use(errorHandler);
 //   })
 // );
 app.listen(PORT,async()=>{
-    logger.info(`Server is running at http://127.0.0.1:${PORT}`);
+    logger.info(`Server is running at http://localhost:${PORT}`);
 
     await dbConnect();
 
