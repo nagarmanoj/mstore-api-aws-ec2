@@ -47,26 +47,11 @@ app.use("/api/payments",paymentRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-// app.use(responseTime((req, res, time) => {
-//     if (req?.route?.path) {
-//       restResponseTimeHistogram.observe(
-//         {
-//           method: req.method,
-//           route: req.route.path,
-//           status_code: res.statusCode,
-//         },
-//         time * 1000
-//       );
-//     }
-//   })
-// );
+
 app.listen(PORT,async()=>{
     logger.info(`Server is running at http://localhost:${PORT}`);
 
     await dbConnect();
 
-    
-
-    
 
 });
