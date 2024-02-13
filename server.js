@@ -49,7 +49,7 @@ app.use(errorHandler);
 
 
 app.listen(PORT,async()=>{
-    logger.info(`Server is running at http://localhost:${PORT}`);
+    logger.info(`Server is running at http://127.0.0.1:${PORT}`);
 
     await dbConnect();
 
