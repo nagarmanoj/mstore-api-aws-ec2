@@ -21,9 +21,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: |
-        touch .env
-        echo "${{ secrets.PROUD_ENV_FILE }}" > .env
+    - run: npm ci    
     - run: sudo pm2 restart server
     
