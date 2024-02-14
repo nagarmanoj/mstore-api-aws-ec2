@@ -95,38 +95,55 @@ const createUser = async(req,res) =>{
 const loginUser = async(req,res)=>{
     try{
         const { email, password } = req.body;
-        const findUser = await User.findOne({ email });
-        //check if the password is correct        
-        
-        if(findUser &&(await findUser.isPasswordMatched(password))){
-            const refreshToken = generateRefreshToken(findUser?._id);
-            const updateuser = await User.findByIdAndUpdate(
-                findUser.id,
-                {
-                    refreshToken:refreshToken,
-                },
-                {
-                    new:true
+        if(email && password){
+            const findUser = await User.findOne({ email });                  
+            if(findUser != null ){
+                if(findUser &&(await findUser.isPasswordMatched(password))){
+                    const refreshToken = generateRefreshToken(findUser?._id);
+                    const updateuser = await User.findByIdAndUpdate(
+                        findUser.id,
+                        {
+                            refreshToken:refreshToken,
+                        },
+                        {
+                            new:true
+                        }
+                    );
+                    res.cookie('refreshToken',refreshToken,{
+                        httpOnly:true,
+                        maxAge:72*60*60*1000,
+                    })
+                    res.status(201).send({
+                        _id:findUser?._id,
+                        name:findUser?.name,                
+                        email:findUser?.email,
+                        role:findUser?.role,
+                        mobile:findUser?.mobile,
+                        verified:findUser?.verified,
+                        isBlocked:findUser?.isBlocked,
+                        cart:findUser?.cart,
+                        orders:findUser?.orders,
+                        wishlist:findUser?.wishlist,
+                        addresses:findUser?.addresses,
+                        token: generateToken(findUser._id),
+                    });
+                }else{
+                    res.send({
+                        status:false,
+                        message:'Invalid Creadentials !'
+                    })
                 }
-            );
-            res.cookie('refreshToken',refreshToken,{
-                httpOnly:true,
-                maxAge:72*60*60*1000,
+            }else{
+                res.send({
+                    status:false,
+                    message:'This email is not register !'
+                })
+            }
+        }else{
+            res.send({
+                status:false,
+                message:'All field are required !'
             })
-            res.json({
-                _id:findUser?._id,
-                name:findUser?.name,                
-                email:findUser?.email,
-                role:findUser?.role,
-                mobile:findUser?.mobile,
-                verified:findUser?.verified,
-                isBlocked:findUser?.isBlocked,
-                cart:findUser?.cart,
-                orders:findUser?.orders,
-                wishlist:findUser?.wishlist,
-                addresses:findUser?.addresses,
-                token: generateToken(findUser._id),
-            });
         }
         
     }catch(error){
