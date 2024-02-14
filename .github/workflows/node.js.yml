@@ -22,5 +22,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci    
-    - run: sudo pm2 restart server
+    - run: sudo systemctl daemon-reload
+    - run: sudo systemctl restart api-mstore-com.service
     
